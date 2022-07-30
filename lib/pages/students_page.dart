@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 
+import '../repository/student_repository.dart';
+
 class StudentsPage extends StatelessWidget {
-  const StudentsPage({Key? key}) : super(key: key);
+  const StudentsPage({Key? key, required this.students}) : super(key: key);
+
+  final List<Student> students;
 
   @override
   Widget build(BuildContext context) {
@@ -11,25 +15,43 @@ class StudentsPage extends StatelessWidget {
       ),
       body: Column(
         children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 32, vertical: 32),
-            child: Text('10 Students'),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 32),
+            child: Text('${students.length} Students'),
           ),
           Expanded(
             child: ListView.separated(
-              itemBuilder: (context, index) => ListTile(
-                title: const Text('Ali'),
-                leading: const Icon(Icons.person),
-                trailing: IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.favorite_border),
-                ),
-              ),
+              itemBuilder: (context, index) =>
+                  StudentRow(student: students.elementAt(index)),
               separatorBuilder: (context, index) => const Divider(),
-              itemCount: 25,
+              itemCount: students.length,
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class StudentRow extends StatelessWidget {
+  const StudentRow({
+    Key? key,
+    required this.student,
+  }) : super(key: key);
+
+  final Student student;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text('${student.name} ${student.surname}'),
+      subtitle: Text('${student.age} age'),
+      leading: student.gender == 'Erkek'
+          ? const Icon(Icons.man_outlined)
+          : const Icon(Icons.woman_outlined),
+      trailing: IconButton(
+        onPressed: () {},
+        icon: const Icon(Icons.favorite_border),
       ),
     );
   }

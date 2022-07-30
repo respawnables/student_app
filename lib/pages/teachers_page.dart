@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 
+import '../repository/teacher_repository.dart';
+
 class TeachersPage extends StatelessWidget {
-  const TeachersPage({Key? key}) : super(key: key);
+  const TeachersPage({Key? key, required this.teachers}) : super(key: key);
+
+  final List<Teacher> teachers;
 
   @override
   Widget build(BuildContext context) {
@@ -17,16 +21,34 @@ class TeachersPage extends StatelessWidget {
           ),
           Expanded(
             child: ListView.separated(
-              itemBuilder: (context, index) => const ListTile(
-                title: Text('Ali'),
-                leading: Icon(Icons.person),
-              ),
+              itemBuilder: (context, index) =>
+                  TeacherRow(teacher: teachers.elementAt(index)),
               separatorBuilder: (context, index) => const Divider(),
-              itemCount: 25,
+              itemCount: teachers.length,
             ),
           ),
         ],
       ),
+    );
+  }
+}
+
+class TeacherRow extends StatelessWidget {
+  const TeacherRow({
+    Key? key,
+    required this.teacher,
+  }) : super(key: key);
+
+  final Teacher teacher;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text('${teacher.name} ${teacher.surname}'),
+      subtitle: Text('${teacher.age} age'),
+      leading: teacher.gender == 'Erkek'
+          ? const Icon(Icons.man_outlined)
+          : const Icon(Icons.woman_outlined),
     );
   }
 }

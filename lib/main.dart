@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:student_app/pages/messages_page.dart';
 import 'package:student_app/pages/students_page.dart';
 import 'package:student_app/pages/teachers_page.dart';
+import 'package:student_app/repository/message_repository.dart';
+import 'package:student_app/repository/student_repository.dart';
+import 'package:student_app/repository/teacher_repository.dart';
 
 void main() {
   runApp(const StudentApp());
@@ -23,16 +26,25 @@ class StudentApp extends StatelessWidget {
   }
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  StudentRepository studentRepository = StudentRepository();
+  TeacherRepository teacherRepository = TeacherRepository();
+  MessageRepository messageRepository = MessageRepository();
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
+        title: Text(widget.title),
       ),
       body: Center(
         child: Column(
@@ -43,7 +55,9 @@ class HomePage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const StudentsPage(),
+                    builder: (context) => StudentsPage(
+                      students: studentRepository.students,
+                    ),
                   ),
                 );
               },
@@ -54,7 +68,8 @@ class HomePage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const TeachersPage(),
+                    builder: (context) =>
+                        TeachersPage(teachers: teacherRepository.students),
                   ),
                 );
               },
@@ -65,11 +80,13 @@ class HomePage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const MessagesPage(),
+                    builder: (context) => MessagesPage(
+                      messages: messageRepository.messages,
+                    ),
                   ),
                 );
               },
-              child: const Text('Messages Page'),
+              child: Text('Messages Page (${messageRepository.messageCount})'),
             )
           ],
         ),
