@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'package:student_app/pages/messages_page.dart';
+import 'package:student_app/pages/students_page.dart';
+import 'package:student_app/pages/teachers_page.dart';
+
 void main() {
   runApp(const StudentApp());
 }
@@ -33,7 +37,41 @@ class HomePage extends StatelessWidget {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[],
+          children: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const StudentsPage(),
+                  ),
+                );
+              },
+              child: const Text('Students Page'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const TeachersPage(),
+                  ),
+                );
+              },
+              child: const Text('Teachers Page'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const MessagesPage(),
+                  ),
+                );
+              },
+              child: const Text('Messages Page'),
+            )
+          ],
         ),
       ),
     );
