@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../models/message.dart';
 import '../repository/message_repository.dart';
 
 class MessagesPage extends ConsumerStatefulWidget {

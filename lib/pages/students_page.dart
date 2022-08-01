@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../models/student.dart';
 import '../repository/student_repository.dart';
 
 class StudentsPage extends ConsumerWidget {

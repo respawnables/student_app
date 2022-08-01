@@ -1,13 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class Message {
-  String text;
-  String sender;
-  DateTime time;
-
-  Message(this.text, this.sender, this.time);
-}
+import '../models/message.dart';
 
 class MessageRepository extends ChangeNotifier {
   final List<Message> messages = [

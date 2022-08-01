@@ -1,14 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class Student {
-  String name;
-  String surname;
-  int age;
-  String gender;
-
-  Student(this.name, this.surname, this.age, this.gender);
-}
+import '../models/student.dart';
 
 class StudentRepository extends ChangeNotifier {
   final List<Student> students = [
