@@ -14,6 +14,7 @@ class TeachersPage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Teachers Page'),
+        actions: const [DownloadTeacherButton()],
       ),
       body: Column(
         children: [
@@ -32,6 +33,44 @@ class TeachersPage extends ConsumerWidget {
         ],
       ),
     );
+  }
+}
+
+class DownloadTeacherButton extends StatefulWidget {
+  const DownloadTeacherButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<DownloadTeacherButton> createState() => _DownloadTeacherButtonState();
+}
+
+class _DownloadTeacherButtonState extends State<DownloadTeacherButton> {
+  bool isLoading = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer(builder: (context, ref, child) {
+      return isLoading
+          ? const CircularProgressIndicator()
+          : IconButton(
+              onPressed: () async {
+                try {
+                  setState(() {
+                    isLoading = true;
+                  });
+                  await ref.read(teacherProvider).getTeacher();
+                } catch (e) {
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(SnackBar(content: Text(e.toString())));
+                } finally {
+                  setState(() {
+                    isLoading = false;
+                  });
+                }
+              },
+              icon: const Icon(Icons.download));
+    });
   }
 }
 
