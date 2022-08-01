@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../repository/teacher_repository.dart';
 
-class TeachersPage extends StatelessWidget {
-  const TeachersPage({Key? key, required this.teachers}) : super(key: key);
-
-  final List<Teacher> teachers;
+class TeachersPage extends ConsumerWidget {
+  const TeachersPage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final teacherRepository = ref.watch(teacherProvider);
+    final teachers = teacherRepository.teachers;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Teachers Page'),

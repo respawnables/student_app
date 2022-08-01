@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../repository/student_repository.dart';
 
-class StudentsPage extends StatelessWidget {
-  const StudentsPage({Key? key, required this.students}) : super(key: key);
-
-  final List<Student> students;
+class StudentsPage extends ConsumerWidget {
+  const StudentsPage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final studentRepository = ref.watch(studentProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Students Page'),
@@ -17,14 +17,14 @@ class StudentsPage extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 32),
-            child: Text('${students.length} Students'),
+            child: Text('${studentRepository.students.length} Students'),
           ),
           Expanded(
             child: ListView.separated(
-              itemBuilder: (context, index) =>
-                  StudentRow(student: students.elementAt(index)),
+              itemBuilder: (context, index) => StudentRow(
+                  student: studentRepository.students.elementAt(index)),
               separatorBuilder: (context, index) => const Divider(),
-              itemCount: students.length,
+              itemCount: studentRepository.students.length,
             ),
           ),
         ],
@@ -33,7 +33,7 @@ class StudentsPage extends StatelessWidget {
   }
 }
 
-class StudentRow extends StatelessWidget {
+class StudentRow extends ConsumerWidget {
   const StudentRow({
     Key? key,
     required this.student,
@@ -42,7 +42,9 @@ class StudentRow extends StatelessWidget {
   final Student student;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final studentRepository = ref.watch(studentProvider);
+    bool isLove = studentRepository.isLove(student);
     return ListTile(
       title: Text('${student.name} ${student.surname}'),
       subtitle: Text('${student.age} age'),
@@ -50,7 +52,9 @@ class StudentRow extends StatelessWidget {
           ? const Icon(Icons.man_outlined)
           : const Icon(Icons.woman_outlined),
       trailing: IconButton(
-        onPressed: () {},
+        onPressed: () {
+          ref.read(studentProvider).love(student, !isLove);
+        },
         icon: const Icon(Icons.favorite_border),
       ),
     );

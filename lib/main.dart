@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:student_app/pages/messages_page.dart';
 import 'package:student_app/pages/students_page.dart';
 import 'package:student_app/pages/teachers_page.dart';
+import 'package:student_app/pages/uid_generator_page.dart';
 import 'package:student_app/repository/message_repository.dart';
 import 'package:student_app/repository/student_repository.dart';
-import 'package:student_app/repository/teacher_repository.dart';
 
 void main() {
-  runApp(const StudentApp());
+  runApp(const ProviderScope(child: StudentApp()));
 }
 
 class StudentApp extends StatelessWidget {
@@ -26,25 +27,17 @@ class StudentApp extends StatelessWidget {
   }
 }
 
-class HomePage extends StatefulWidget {
+class HomePage extends ConsumerWidget {
   const HomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
   @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  StudentRepository studentRepository = StudentRepository();
-  TeacherRepository teacherRepository = TeacherRepository();
-  MessageRepository messageRepository = MessageRepository();
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final studentRepository = ref.watch(studentProvider);
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(title),
       ),
       body: Center(
         child: Column(
@@ -55,9 +48,7 @@ class _HomePageState extends State<HomePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => StudentsPage(
-                      students: studentRepository.students,
-                    ),
+                    builder: (context) => const StudentsPage(),
                   ),
                 );
               },
@@ -68,8 +59,7 @@ class _HomePageState extends State<HomePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>
-                        TeachersPage(teachers: teacherRepository.students),
+                    builder: (context) => const TeachersPage(),
                   ),
                 );
               },
@@ -80,14 +70,21 @@ class _HomePageState extends State<HomePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MessagesPage(
-                      messages: messageRepository.messages,
-                    ),
+                    builder: (context) => const MessagesPage(),
                   ),
                 );
               },
-              child: Text('Messages Page (${messageRepository.messageCount})'),
-            )
+              child:
+                  Text('Messages Page (${ref.watch(newMessageCountProvider)})'),
+            ),
+            TextButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const UidGeneratorPage()));
+                },
+                child: const Text('Uid Generate Page'))
           ],
         ),
       ),

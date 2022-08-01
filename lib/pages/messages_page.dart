@@ -1,14 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../repository/message_repository.dart';
 
-class MessagesPage extends StatelessWidget {
-  const MessagesPage({Key? key, required this.messages}) : super(key: key);
+class MessagesPage extends ConsumerStatefulWidget {
+  const MessagesPage({Key? key}) : super(key: key);
 
-  final List<Message> messages;
+  @override
+  _MessagesPageState createState() => _MessagesPageState();
+}
+
+class _MessagesPageState extends ConsumerState<MessagesPage> {
+  @override
+  void initState() {
+    Future.delayed(Duration.zero)
+        .then((value) => ref.read(newMessageCountProvider.notifier).reset());
+  }
 
   @override
   Widget build(BuildContext context) {
+    final messageRepository = ref.watch(messageProvider);
+    final messages = messageRepository.messages;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Messages Page'),
@@ -69,7 +81,7 @@ class MessageView extends StatelessWidget {
               border: Border.all(color: Colors.grey, width: 2),
               borderRadius: const BorderRadius.all(Radius.circular(15)),
               color: Colors.orange.shade100),
-          child:  Padding(
+          child: Padding(
             padding: const EdgeInsets.all(24.0),
             child: Text(message.text),
           ),

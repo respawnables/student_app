@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 class Message {
   String text;
   String sender;
@@ -6,7 +9,7 @@ class Message {
   Message(this.text, this.sender, this.time);
 }
 
-class MessageRepository {
+class MessageRepository extends ChangeNotifier {
   final List<Message> messages = [
     Message(
         'Merahaba', 'Ali', DateTime.now().subtract(const Duration(minutes: 4))),
@@ -16,6 +19,14 @@ class MessageRepository {
         'Evet', 'Ayşe', DateTime.now().subtract(const Duration(minutes: 2))),
     Message('Nasılsın', 'Ayşe', DateTime.now()),
   ];
-
-  final messageCount = 4;
 }
+
+class NewMessageCount extends StateNotifier<int> {
+  NewMessageCount(int state) : super(state);
+
+  void reset() => state = 0;
+}
+
+final messageProvider = ChangeNotifierProvider((ref) => MessageRepository());
+final newMessageCountProvider =
+    StateNotifierProvider<NewMessageCount, int>((ref) => NewMessageCount(4));
