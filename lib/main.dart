@@ -10,10 +10,7 @@ import 'package:student_app/pages/uid_generator_page.dart';
 import 'package:student_app/repository/message_repository.dart';
 import 'package:student_app/repository/student_repository.dart';
 
-void main() async {
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+void main() {
   runApp(const ProviderScope(child: StudentApp()));
 }
 
@@ -27,7 +24,38 @@ class StudentApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const HomePage(title: 'Student Home Page'),
+      home: const SplashScreen(),
+    );
+  }
+}
+
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({Key? key}) : super(key: key);
+
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    initializeFirebase();
+  }
+
+  Future<void> initializeFirebase() async {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    Navigator.of(context).pushReplacement(MaterialPageRoute(
+        builder: (context) => const HomePage(title: 'Student Home Page')));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: Center(
+        child: CircularProgressIndicator(),
+      ),
     );
   }
 }
