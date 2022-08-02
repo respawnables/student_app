@@ -1,5 +1,7 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:student_app/firebase_options.dart';
 
 import 'package:student_app/pages/messages_page.dart';
 import 'package:student_app/pages/students_page.dart';
@@ -8,7 +10,10 @@ import 'package:student_app/pages/uid_generator_page.dart';
 import 'package:student_app/repository/message_repository.dart';
 import 'package:student_app/repository/student_repository.dart';
 
-void main() {
+void main() async {
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const ProviderScope(child: StudentApp()));
 }
 
